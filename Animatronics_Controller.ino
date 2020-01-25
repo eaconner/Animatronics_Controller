@@ -13,7 +13,7 @@
 #define INTERFACE_PIN 28
 #define TEST_PIN 29
 
-char versionNumber[] = "2.1.3";
+char versionNumber[] = "2.2.0";
 
 /**
 *   @brief  Setup the Animatronics Controller
@@ -185,6 +185,7 @@ void configMenu() {
     Serial.println("i - Config Input");
     Serial.println("c - Config Servo");
     Serial.println("x - Invert Servo");
+	Serial.println("f - Servo Filter");
     Serial.println("d - Enable/Disable Servo");
     Serial.println("s - Save Config File");
     Serial.println("t - Test");
@@ -205,6 +206,10 @@ void configMenu() {
             Serial.print("\nEnter servo number 0-15: ");
             invertServo(getInt());
             break;
+	    case 'f':
+	        Serial.print("\nEnter servo number 0-15: ");
+	        filterServo(getInt());
+	        break;
         case 'd':
             Serial.print("\nEnter servo number 0-15: ");
             toggleServo(getInt());

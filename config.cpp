@@ -9,7 +9,7 @@
 #include "show.h"
 #include <SD.h>
 
-#define CONF_BYTE_SIZE 0x300
+#define CONF_BYTE_SIZE 0x30F
 char configFile[8] = "FIG.CFG";
 File CONFIG_FILE;
 uint8_t conf[CONF_BYTE_SIZE] = {};
@@ -139,6 +139,7 @@ input_t getInputData(uint8_t number) {
 servo_t getServoData(uint8_t number) {
     servo_t s;
     uint16_t servoBase = 0x200 + (number * 0x10);
+	uint16_t servoFilterBase = 0x300 + number;
 
     s.enabled = conf[servoBase];
     s.pin = conf[servoBase + 1];
@@ -147,6 +148,7 @@ servo_t getServoData(uint8_t number) {
     s.input = getInputData(conf[servoBase + 6]);
     s.invert = conf[servoBase + 7];
     s.value = 0;
+	s.filter = conf[servoFilterBase];
 
     return s;
 }
@@ -277,6 +279,24 @@ void invertServo(uint8_t number) {
     Serial.print("Servo #");
     Serial.print(number);
     Serial.println(" inverted");
+}
+
+void filterServo(uint8_t number) {
+    uint16_t servoFilterBase = 0x300 + number;
+    uint8_t currentValue = conf[servoFilterBase];
+
+    Serial.print("---- Configure Servo #");
+    Serial.print(number);
+    Serial.println(" Filter ----");
+    Serial.println(getServoName(number));
+	
+	Serial.print("Current filter value: ");
+	Serial.println(currentValue);
+	
+	Serial.print("Set new filter value: ");
+	uint8_t newValue = getInt();
+
+    conf[servoFilterBase] = newValue;
 }
 
 void toggleServo(uint8_t number) {

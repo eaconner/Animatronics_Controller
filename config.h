@@ -110,6 +110,13 @@
     *   @param  number  Servo number, 0 ... 15
     */
     void invertServo(uint8_t number);
+	
+    /**
+    *   @brief  Change filter value for a given servo
+    *
+    *   @param  number  Servo number, 0 ... 15
+    */
+	void filterServo(uint8_t number);
 
     /**
     *   @brief  Enable/Disable a given servo

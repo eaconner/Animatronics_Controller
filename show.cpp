@@ -10,7 +10,7 @@
 #include "servo.h"
 #include <SD.h>
 
-#define SAMPLE_RATE 40  // 10fps 10ms | 20fps 50ms | 25fps 40ms | 40fps 25ms | 50fps 20ms
+#define SAMPLE_RATE 10  // 10fps 100ms | 20fps 50ms | 25fps 40ms | 40fps 25ms | 50fps 20ms
 #define SHOW_BYTE_SIZE 0xFFFF
 char fileName[8] = "";
 File SHOW_FILE;
@@ -200,10 +200,11 @@ void recordShow() {
 
 void testShow() {
     Serial.println("Starting test, 'e' to exit...");
+	uint8_t servoCount = getServoCount();
+	
     while (Serial.available() <= 0) {
         millisNow = millis();
-        uint8_t servoCount = getServoCount();
-
+        
         if (millisNow - millisPrev >= SAMPLE_RATE) {
             millisPrev = millisNow;
 

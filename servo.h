@@ -28,6 +28,7 @@
         uint16_t min;
         uint16_t max;
         uint16_t value;
+		uint8_t filter;
         input_t input;
         bool invert;
     };
@@ -95,5 +96,15 @@
     *   @param  number  Servo number to play, 0 ... 15
     */
     void playServo(uint8_t number);
+	
+    /**
+    *   @brief  Filter servo value for smoothing
+    *
+    *   @param  prevValue  @Todo
+	*	@param  currentValue  @Todo
+	*	@param  filter  @Todo
+	*   @return Returns filtered servo value
+    */
+	uint16_t filter(uint16_t prevValue, uint16_t currentValue, int filter);
 
 #endif  // SERVO_H_

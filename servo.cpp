@@ -13,6 +13,7 @@ PWMServo servoBoard = PWMServo();  // Use default address 0x40
 
 input_t input[16];
 servo_t servo[16];
+uint16_t servoFilterValue[16];
 
 void setupServos() {
     servoBoard.begin();
@@ -68,6 +69,7 @@ void centerServos() {
     for (uint8_t s = 0; s < servoCount; s++) {
         if (servo[s].enabled) {
             servoBoard.setPin(s, getServoCenter(s));
+			servoFilterValue[s] = getServoCenter(s);
         }
     }
 }
@@ -82,11 +84,13 @@ void updateServo(uint8_t number) {
 
         if (s.invert) {
             s.value = map(s.input.value, 0, 255, s.max, s.min);
+			servoFilterValue[number] = filter(servoFilterValue[number], s.value, s.filter);
         } else {
             s.value = map(s.input.value, 0, 255, s.min, s.max);
+			servoFilterValue[number] = filter(servoFilterValue[number], s.value, s.filter);
         }
-
-        servoBoard.setPin(s.pin, s.value);
+		
+        servoBoard.setPin(s.pin, servoFilterValue[number]);
     }
 }
 
@@ -138,11 +142,13 @@ void recordServo(uint8_t number) {
 
         if (s.invert) {
             s.value = map(s.input.value, 0, 255, s.max, s.min);
+			servoFilterValue[number] = filter(servoFilterValue[number], s.value, s.filter);
         } else {
             s.value = map(s.input.value, 0, 255, s.min, s.max);
+			servoFilterValue[number] = filter(servoFilterValue[number], s.value, s.filter);
         }
-
-        servoBoard.setPin(s.pin, s.value);
+		
+        servoBoard.setPin(s.pin, servoFilterValue[number]);
     }
 }
 
@@ -154,10 +160,17 @@ void playServo(uint8_t number) {
 
         if (s.invert) {
             s.value = map(s.input.value, 0, 255, s.max, s.min);
+			servoFilterValue[number] = filter(servoFilterValue[number], s.value, s.filter);
         } else {
             s.value = map(s.input.value, 0, 255, s.min, s.max);
+			servoFilterValue[number] = filter(servoFilterValue[number], s.value, s.filter);
         }
-
-        servoBoard.setPin(s.pin, s.value);
+		
+        servoBoard.setPin(s.pin, servoFilterValue[number]);
     }
+}
+
+uint16_t filter(uint16_t prevValue, uint16_t currentValue, int filter) {
+	uint16_t lengthFiltered = (currentValue + (prevValue * filter)) / (filter + 1);
+	return lengthFiltered;  
 }
