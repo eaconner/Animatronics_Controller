@@ -13,7 +13,7 @@ PWMServo servoBoard = PWMServo();  // Use default address 0x40
 
 input_t input[16];
 servo_t servo[16];
-uint16_t servoFilterValue[16];
+float servoFilterValue[16];
 
 void setupServos() {
     servoBoard.begin();
@@ -170,7 +170,7 @@ void playServo(uint8_t number) {
     }
 }
 
-uint16_t filter(uint16_t prevValue, uint16_t currentValue, int filter) {
-	uint16_t lengthFiltered = (currentValue + (prevValue * filter)) / (filter + 1);
+float filter(float servoValue, float inputValue, int filter) {
+	uint16_t lengthFiltered = (inputValue + (servoValue * filter)) / (filter + 1);
 	return lengthFiltered;  
 }

@@ -100,11 +100,11 @@
     /**
     *   @brief  Filter servo value for smoothing
     *
-    *   @param  prevValue  @Todo
-	*	@param  currentValue  @Todo
+    *   @param  servoValue  @Todo
+	*	@param  inputValue  @Todo
 	*	@param  filter  @Todo
 	*   @return Returns filtered servo value
     */
-	uint16_t filter(uint16_t prevValue, uint16_t currentValue, int filter);
+	float filter(float servoValue, float inputValue, int filter);
 
 #endif  // SERVO_H_
