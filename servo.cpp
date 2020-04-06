@@ -67,9 +67,9 @@ void centerServos() {
     uint8_t servoCount = getServoCount();
 
     for (uint8_t s = 0; s < servoCount; s++) {
-        if (servo[s].enabled) {
+		if (servo[s].enabled) {
             servoBoard.setPin(s, getServoCenter(s));
-			servoFilterValue[s] = getServoCenter(s);
+			servoFilterValue[s] = map(getServoCenter(s), 0, 255, servo[s].max, servo[s].min);
         }
     }
 }
@@ -81,16 +81,15 @@ void updateServo(uint8_t number) {
         s.input.value = analogRead(s.input.pin);
         s.input.value = constrain(s.input.value, s.input.min, s.input.max);
         s.input.value = map(s.input.value, s.input.min, s.input.max, 0, 255);
+		servoFilterValue[number] = filter(servoFilterValue[number], s.input.value, s.filter);
 
         if (s.invert) {
-            s.value = map(s.input.value, 0, 255, s.max, s.min);
-			servoFilterValue[number] = filter(servoFilterValue[number], s.value, s.filter);
+            s.value = map(servoFilterValue[number], 0, 255, s.max, s.min);
         } else {
-            s.value = map(s.input.value, 0, 255, s.min, s.max);
-			servoFilterValue[number] = filter(servoFilterValue[number], s.value, s.filter);
+            s.value = map(servoFilterValue[number], 0, 255, s.min, s.max);
         }
-		
-        servoBoard.setPin(s.pin, servoFilterValue[number]);
+
+        servoBoard.setPin(s.pin, s.value);
     }
 }
 
@@ -170,7 +169,7 @@ void playServo(uint8_t number) {
     }
 }
 
-float filter(float servoValue, float inputValue, int filter) {
-	uint16_t lengthFiltered = (inputValue + (servoValue * filter)) / (filter + 1);
+float filter(float servoValue, float inputValue, uint8_t filter) {
+	float lengthFiltered = (inputValue + (servoValue * filter)) / (filter + 1);
 	return lengthFiltered;  
 }

@@ -13,7 +13,7 @@
 #define INTERFACE_PIN 28
 #define TEST_PIN 29
 
-char versionNumber[] = "2.2.3";
+char versionNumber[] = "2.2.4";
 
 /**
 *   @brief  Setup the Animatronics Controller

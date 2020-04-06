@@ -105,6 +105,6 @@
 	*	@param  filter  @Todo
 	*   @return Returns filtered servo value
     */
-	float filter(float servoValue, float inputValue, int filter);
+	float filter(float servoValue, float inputValue, uint8_t filter);
 
 #endif  // SERVO_H_
