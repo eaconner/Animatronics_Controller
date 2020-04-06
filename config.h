@@ -124,5 +124,8 @@
     *   @param  number  Servo number, 0 ... 15
     */
     void toggleServo(uint8_t number);
+	
+	void printServos(void);
+	void printInputs(void);
 
 #endif  // CONFIG_H_

@@ -236,7 +236,7 @@ void configInput(uint8_t number) {
 void configServo(uint8_t number) {
     uint16_t servoBase = 0x200 + (number * 0x10);
 
-    Serial.print("---- Configure Servo #");
+    Serial.print("\n---- Configure Servo #");
     Serial.print(number);
     Serial.println(" ----");
     Serial.println(getServoName(number));
@@ -246,7 +246,8 @@ void configServo(uint8_t number) {
     Serial.print("\nEnabled 0-1: ");
     conf[servoBase] = getInt();  // Enabled
 
-    Serial.print("Which input would you like to use 0-15: ");
+    printInputs();
+	Serial.print("Which input would you like to use 0-15: ");
     conf[servoBase + 6] = getInt();  // Input
     Serial.println(getInputName(conf[servoBase + 6]));
 
@@ -313,4 +314,30 @@ void toggleServo(uint8_t number) {
         conf[servoBase + 7] = 1;
         Serial.println(" enabled");
     }
+}
+
+void printServos() {
+	Serial.println();
+	for (int s = 0; s < 16; s++ ) {
+		uint16_t servoBase = 0x200 + (s * 0x10);
+		uint8_t enabled = conf[servoBase];
+		if (enabled) {
+			Serial.print(s);
+			Serial.print(": ");
+			Serial.println(getServoName(s));
+		}
+	}
+}
+
+void printInputs() {
+	Serial.println();
+	for (int i = 0; i < 16; i++ ) {
+		uint16_t inputBase = 0x100 + (i * 0x10);
+		uint8_t enabled = conf[inputBase];
+		if (enabled) {
+			Serial.print(i);
+			Serial.print(": ");
+			Serial.println(getInputName(i));
+		}
+	}
 }
