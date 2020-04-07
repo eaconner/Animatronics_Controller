@@ -68,8 +68,8 @@ void centerServos() {
 
     for (uint8_t s = 0; s < servoCount; s++) {
 		if (servo[s].enabled) {
+			servoFilterValue[s] = getServoCenter(s);
             servoBoard.setPin(s, getServoCenter(s));
-			servoFilterValue[s] = map(getServoCenter(s), 0, 255, servo[s].max, servo[s].min);
         }
     }
 }
@@ -138,16 +138,15 @@ void recordServo(uint8_t number) {
         s.input.value = constrain(s.input.value, s.input.min, s.input.max);
         s.input.value = map(s.input.value, s.input.min, s.input.max, 0, 255);
         saveData(getShowFrameCount() + (getShowMaxFrameCount() * number), s.input.value);
+		servoFilterValue[number] = filter(servoFilterValue[number], s.input.value, s.filter);
 
         if (s.invert) {
-            s.value = map(s.input.value, 0, 255, s.max, s.min);
-			servoFilterValue[number] = filter(servoFilterValue[number], s.value, s.filter);
+            s.value = map(servoFilterValue[number], 0, 255, s.max, s.min);
         } else {
-            s.value = map(s.input.value, 0, 255, s.min, s.max);
-			servoFilterValue[number] = filter(servoFilterValue[number], s.value, s.filter);
+            s.value = map(servoFilterValue[number], 0, 255, s.min, s.max);
         }
-		
-        servoBoard.setPin(s.pin, servoFilterValue[number]);
+
+        servoBoard.setPin(s.pin, s.value);
     }
 }
 
@@ -156,16 +155,15 @@ void playServo(uint8_t number) {
 
     if (s.enabled) {
         s.input.value = getData(getShowFrameCount() + (getShowMaxFrameCount() * number));
+		servoFilterValue[number] = filter(servoFilterValue[number], s.input.value, s.filter);
 
         if (s.invert) {
-            s.value = map(s.input.value, 0, 255, s.max, s.min);
-			servoFilterValue[number] = filter(servoFilterValue[number], s.value, s.filter);
+            s.value = map(servoFilterValue[number], 0, 255, s.max, s.min);
         } else {
-            s.value = map(s.input.value, 0, 255, s.min, s.max);
-			servoFilterValue[number] = filter(servoFilterValue[number], s.value, s.filter);
+            s.value = map(servoFilterValue[number], 0, 255, s.min, s.max);
         }
-		
-        servoBoard.setPin(s.pin, servoFilterValue[number]);
+
+        servoBoard.setPin(s.pin, s.value);
     }
 }
 

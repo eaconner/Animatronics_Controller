@@ -125,7 +125,14 @@
     */
     void toggleServo(uint8_t number);
 	
+    /**
+    *   @brief  Prints a list of all enabled servos
+    */
 	void printServos(void);
+	
+    /**
+    *   @brief  Prints a list of all enabled inputs
+    */
 	void printInputs(void);
 
 #endif  // CONFIG_H_

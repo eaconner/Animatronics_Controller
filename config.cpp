@@ -56,6 +56,7 @@ void saveConfig() {
     if (CONFIG_FILE) {
         CONFIG_FILE.write(conf, sizeof(conf));
         CONFIG_FILE.close();
+		setupServos();
     } else {
         Serial.print("Error opening: ");
         Serial.println(configFile);
