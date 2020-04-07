@@ -13,7 +13,7 @@
 #define INTERFACE_PIN 28
 #define TEST_PIN 29
 
-char versionNumber[] = "2.2.4";
+char versionNumber[] = "2.2.5";
 
 /**
 *   @brief  Setup the Animatronics Controller
@@ -132,6 +132,7 @@ void loadedShowMenu() {
     Serial.println("p - Play Show File");
     Serial.println("l - Loop Show File");
     Serial.println("r - Record Show File");
+	Serial.println("n - Change Show File Name");
     Serial.println("s - Save Show File");
     Serial.println("d - Delete Show File");
     Serial.println("e - Exit");
@@ -159,6 +160,10 @@ void loadedShowMenu() {
 
             recordShow();
             break;
+		case 'n':
+			Serial.print("Enter show name: ");
+			setShowName(getString());
+        	break;
         case 's':
             saveShow();
             break;
@@ -181,12 +186,15 @@ void loadedShowMenu() {
 *   @brief  Config menu
 */
 void configMenu() {
-    Serial.println("\n-------------------------------");
+    uint8_t numb;
+	
+	Serial.println("\n-------------------------------");
     Serial.println("i - Config Input");
     Serial.println("c - Config Servo");
     Serial.println("x - Invert Servo");
 	Serial.println("f - Servo Filter");
     Serial.println("d - Enable/Disable Servo");
+	Serial.println("n - Change Name");
     Serial.println("s - Save Config File");
     Serial.println("t - Test");
     Serial.println("e - Exit");
@@ -222,6 +230,32 @@ void configMenu() {
         case 's':
             saveConfig();
             break;
+	    case 'n':
+	    	Serial.println("\n-------------------------------");
+	    	Serial.println("i - Input");
+	    	Serial.println("s - Servo");
+    		Serial.println("-------------------------------\n");
+			Serial.print("Select an option: ");
+			switch (getChar()) {
+		        case 'i':
+	            	printInputs();
+					Serial.print("Enter input number 0-15: ");
+					numb = getInt();
+					Serial.print("Enter input name: ");
+					setInputName(numb, getString());
+		            break;
+		        case 's':
+	        		printServos();
+					Serial.print("Enter servo number 0-15: ");
+					numb = getInt();
+					Serial.print("Enter servo name: ");
+					setServoName(numb, getString());
+		            break;
+		        default:
+		            Serial.println("Invalid value...\n");
+		            break;
+			}
+	        break;
         case 't':
             testShow();
             break;

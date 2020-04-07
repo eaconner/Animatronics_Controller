@@ -11,7 +11,6 @@ char getChar() {
     }
 
     char value = Serial.read();
-    Serial.println(value);
 
     while (Serial.available() > 0) {
         Serial.read();
@@ -26,7 +25,6 @@ uint32_t getInt() {
     }
 
     uint32_t value = constrain(Serial.parseInt(), 0, 4294967295);
-    Serial.println(value);
 
     while (Serial.available() > 0) {
         Serial.read();
@@ -48,8 +46,6 @@ char* getString() {
         buffer[c] = Serial.read();
         c++;
     }
-
-    Serial.println(buffer);
 
     return buffer;
 }

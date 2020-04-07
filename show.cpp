@@ -14,7 +14,7 @@
 #define SHOW_BYTE_SIZE 0xFFFF
 char fileName[8] = "";
 File SHOW_FILE;
-uint8_t program[SHOW_BYTE_SIZE] = {};
+uint8_t program[SHOW_BYTE_SIZE + 1] = {};
 uint32_t showFrameCount = 0;
 uint32_t showServoMaxFrameCount = 0;
 uint32_t showMaxFrameCount = 0;
@@ -252,11 +252,15 @@ char* getShowName() {
 }
 
 void setShowName(char* name) {
-    for (uint8_t c = 0; c < 15; c++) {
+    for (uint8_t c = 0; c < 16; c++) {
         if (name[c] != 0x00) {
             program[0xFFF0 + c] = name[c];
+        } else {
+        	program[0xFFF0 + c] = 0x00;
         }
     }
+
+	saveShow();
 }
 
 void saveData(uint32_t address, uint8_t data) {

@@ -12,7 +12,7 @@
 #define CONF_BYTE_SIZE 0x30F
 char configFile[8] = "FIG.CFG";
 File CONFIG_FILE;
-uint8_t conf[CONF_BYTE_SIZE] = {};
+uint8_t conf[CONF_BYTE_SIZE + 1] = {};
 
 void loadConfig() {
     if (SD.exists(configFile)) {
@@ -93,9 +93,11 @@ char* getInputName(uint8_t number) {
 void setInputName(uint8_t number, char* name) {
     uint16_t inputBase = 0x108 + (number * 0x10);
 
-    for (uint8_t c = 0; c <= 8; c++) {
+    for (uint8_t c = 0; c < 8; c++) {
         if (name[c] != 0x00) {
             conf[inputBase + c] = name[c];
+        } else {
+        	conf[inputBase + c] = 0x00;
         }
     }
 }
@@ -117,10 +119,12 @@ char* getServoName(uint8_t number) {
 void setServoName(uint8_t number, char* name) {
     uint16_t servoBase = 0x208 + (number * 0x10);
 
-    for (uint8_t c = 0; c <= 8; c++) {
+    for (uint8_t c = 0; c < 8; c++) {
         if (name[c] != 0x00) {
             conf[servoBase + c] = name[c];
-        }
+		} else {
+			conf[servoBase + c] = 0x00;
+		}
     }
 }
 
